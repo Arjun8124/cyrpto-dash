@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import Details from "../components/Details";
 const API_URL = import.meta.env.VITE_API_COIN_URL;
 
 export default function CoinDetailsPage() {
@@ -17,7 +18,6 @@ export default function CoinDetailsPage() {
             `Failed to fetch the details for the coin ${param.id}`
           );
         const data = await res.json();
-        console.log(data);
         setDetails(data);
       } catch (err) {
         setError(err.message);
@@ -28,49 +28,5 @@ export default function CoinDetailsPage() {
     fetchData();
   }, [param]);
 
-  return (
-    <>
-      {loading && (
-        <div className="loading-overlay">
-          <div className="loader"></div>
-        </div>
-      )}
-      {error && <p>Error : {error}</p>}
-      {!loading && !error && (
-        <div className={loading ? "blur-background" : ""}>
-          <div className="details">
-            <img src={details.image.large} alt={details.name} />
-            <h1 className="self-center">{details.name}</h1>
-            <p className="mt-5">{details.description.en}</p>
-            <h2>
-              Market Cap : $
-              {details.market_data.market_cap.usd.toLocaleString()}
-            </h2>
-            <h2>Market Cap Rank : {details.market_cap_rank}</h2>
-            <h2>
-              Current Price : $
-              {details.market_data.current_price.usd.toLocaleString()}
-            </h2>
-            <h2
-              className={
-                details.market_data.price_change_percentage_24h.toFixed(3) > 0
-                  ? "positive"
-                  : "negative"
-              }
-            >
-              Market Cap Change Percentage in 24h :{" "}
-              {details.market_data.price_change_percentage_24h.toFixed(3)}%{" "}
-            </h2>
-            <a href={details.links.homepage}>HomePage Link</a>
-            <h3>Categories: </h3>
-            <ul className="categories">
-              {details.categories.map((category) => (
-                <li>{category}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
-    </>
-  );
+  return <Details loading={loading} error={error} details={details} />;
 }
