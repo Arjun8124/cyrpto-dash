@@ -39,20 +39,24 @@ export default function HomePage({
     });
 
   return (
-    <div>
-      <h1>🚀Crypto Dash</h1>
-      <div className="top-controls">
-        <Show
-          perPage={perPage}
-          setLoading={setLoading}
-          setPerPage={setPerPage}
-        />
-        <Filter filterCoins={filterCoins} setFilterCoins={setFilterCoins} />
-        <Sort sort={sort} setSort={setSort} />
-      </div>
-      {loading && <p>Loading...</p>}
-      {error && <p>Error : {error}</p>}
-      {!loading && !error && (
+    <>
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loader"></div>
+        </div>
+      )}
+      <div className={loading ? "blur-background" : ""}>
+        <h1>🚀Crypto Dash</h1>
+        <div className="top-controls">
+          <Show
+            perPage={perPage}
+            setLoading={setLoading}
+            setPerPage={setPerPage}
+          />
+          <Filter filterCoins={filterCoins} setFilterCoins={setFilterCoins} />
+          <Sort sort={sort} setSort={setSort} />
+        </div>
+        {error && <p className="error">Error : {error}</p>}
         <main className="grid">
           {filteredArray.length > 0 ? (
             filteredArray.map((coin) => <CoinCard coin={coin} key={coin.id} />)
@@ -60,7 +64,7 @@ export default function HomePage({
             <p>No Matches Found!!</p>
           )}
         </main>
-      )}
-    </div>
+      </div>
+    </>
   );
 }
